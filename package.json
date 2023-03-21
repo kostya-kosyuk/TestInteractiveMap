@@ -7,6 +7,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "pixi-svg": "^3.2.0",
     "pixi.js": "^7.0.0"
   },
   "devDependencies": {

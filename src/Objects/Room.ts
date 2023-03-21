@@ -1,11 +1,12 @@
-import { Container, Graphics, Sprite, Texture, Text } from "pixi.js";
+import { Container, Graphics, Sprite, Texture } from "pixi.js";
 import { Coords } from "./Coords";
+import { InfoWindow } from "./InfoWindow";
 
 export class Room extends Container {
     title: string;
     coords: Coords;
     sprite: Sprite;
-    infoWindow: Container;
+    infoWindow: InfoWindow;
     constructor (
         title: string,
         width: number,
@@ -19,15 +20,13 @@ export class Room extends Container {
         this.height = height;
 
         this.coords = this.addCoords(x, y);
-
         this.sprite = this.addSprite(width, height);
+        this.infoWindow = new InfoWindow(`${this.title} infoWindow`, this.sprite);
 
-        this.infoWindow = this.addInfoWindow();
+        this.addChild(this.sprite);
+        this.addChild(this.infoWindow);
 
         this.addBorder(this.sprite);
-        this.addBorder(this.infoWindow);
-
-        this.showinfo();
     };
 
     addCoords(x: number, y: number) {
@@ -49,8 +48,6 @@ export class Room extends Container {
         sprite.interactive = true;
         sprite.on('click', this.onClickSprite);
 
-        this.addChild(sprite);
-
         return sprite;
     };
 
@@ -60,22 +57,6 @@ export class Room extends Container {
         border.drawRect(object.x - 1, object.y - 1, object.width + 2, object.height + 2);
 
         this.addChild(border);
-    };
-
-    addInfoWindow() {
-        const infoWindow = new Container();
-
-        infoWindow.x = this.sprite.x + this.sprite.width;
-        infoWindow.y = this.sprite.y;
-
-        const infoText = new Text('Information goes here.');
-
-        infoWindow.addChild(infoText);
-        infoWindow.visible = false;
-
-        this.addChild(infoWindow);
-
-        return infoWindow;
     };
 
     onClickSprite = () => {
